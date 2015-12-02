@@ -170,16 +170,14 @@ angular.module("app", ["ngRoute", 'ngAnimate', 'ui.bootstrap'])
             });
         };
         
-        $scope.agregarEvaluacion = function()
-        {
+        $scope.agregarEvaluacion = function() {
             $scope.nueva = true;
             $scope.editar = false;
             $scope.nombreEvaluacion = '';
             $scope.porcentajeEvaluacion = '';
         };
         
-        $scope.editarEvaluacion = function(id, n, p)
-        {
+        $scope.editarEvaluacion = function(id, n, p) {
             $scope.nueva = false;
             $scope.editar = true;
             $scope.nombreEvaluacion = n;
@@ -191,8 +189,7 @@ angular.module("app", ["ngRoute", 'ngAnimate', 'ui.bootstrap'])
         $scope.$watch('nombreEvaluacion',function() {$scope.validar();});
         $scope.$watch('porcentajeEvaluacion',function() {$scope.validar();});
 
-        $scope.validar = function() 
-        {
+        $scope.validar = function() {
             $scope.nuevaEvalOk = false;
             $scope.nuevaEvalError = false;
 
@@ -282,28 +279,29 @@ angular.module("app", ["ngRoute", 'ngAnimate', 'ui.bootstrap'])
         };
         
         $scope.verNotas = function(id, gr,n,p) {
+            console.log(gr + " - " + id);
             $scope.nombreEvaluacion = n;
             $scope.porcentajeEvaluacion = p; 
             $scope.idEvaluacion = id;
             
             $http.get("./BD/getHistorialNotas.php?grupo="+gr+"&evaluacion="+id)
-            .success(function(response) {$scope.historialNotas = response;});
+            .success(function(response) {
+                $scope.historialNotas = response;
+            });
         };
                 
         $scope.guardarCalificacion = function(ced) {
             document.getElementById('estado').setAttribute("class","text-danger");
-            $scope.estado = "Guardando cambios.";
+            $scope.estado = "Guardando cambios...";
             $http.get("./BD/insertarCalificacion.php?cedula="+ced+"&evaluacion="+$scope.idEvaluacion+"&nota="+document.getElementById(ced).value)
             .success(function(response) {});
             $timeout(function(){
                 document.getElementById('estado').setAttribute("class","text-success");
                 $scope.estado = "Guardado.";
             }, 1000);
-            
         };
         
-        $scope.citasRevision = function(id)
-        {
+        $scope.citasRevision = function(id) {
             $scope.crearCita = true;
             $scope.verCitas = false;
             $scope.idEvaluacion = id;
@@ -316,6 +314,39 @@ angular.module("app", ["ngRoute", 'ngAnimate', 'ui.bootstrap'])
             document.getElementById('tabVerCitas').className = 'btn btn-default';
             document.getElementById('modalCitas').className = 'modal-dialog modal-md';
         };
+
+        $scope.cargarNotas = function() {
+            document.getElementById('estado').setAttribute("class","text-danger");
+            $scope.estado = "Cargando notas...";
+
+            $scope.arrayNotas = $scope.notasCargadas.split("\n");
+            
+            for (var i = 0; i < $scope.arrayNotas.length; i++) {
+                $scope.notaEstudiante = $scope.arrayNotas[i].split("\t");
+
+                angular.forEach($scope.historialNotas, function(value, key){
+                    if(value.cedula === $scope.notaEstudiante[0]) {
+                        value.nota = $scope.notaEstudiante[1];
+                    }
+                });
+            }
+
+            $scope.notasCargadas = "";
+
+            angular.forEach($scope.historialNotas, function(value, key){
+                $http.get("./BD/insertarCalificacion.php?cedula="+value.cedula+"&evaluacion="+$scope.idEvaluacion+"&nota="+value.nota)
+                .success(function(response) {});
+            });
+
+            $timeout(function(){
+                document.getElementById('estado').setAttribute("class","text-success");
+                $scope.estado = "Notas cargadas.";
+            }, 1000);
+
+            $timeout(function(){
+                $scope.estado = "";
+            }, 3000);
+        }
         
     })
     

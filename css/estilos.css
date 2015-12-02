@@ -1,14 +1,24 @@
 
 body { 
-  background: url('http://wallensteyn.com/wp-content/uploads/2015/09/hd_wallpapers_n66h.jpg') no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  	background: url('http://wallensteyn.com/wp-content/uploads/2015/09/hd_wallpapers_n66h.jpg') no-repeat center center fixed; 
+  	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
 }
 
 .panel-default {
-opacity: 0.9;
-margin-top:30px;
+	opacity: 0.9;
+	margin-top:30px;
 }
-.form-group.last { margin-bottom:0px; }
+
+.form-group.last { 
+	margin-bottom:0px; 
+}
+
+.txt-area {
+	resize: none;
+	font-family: arial;
+	width: 90%;
+	height: 100px;
+}

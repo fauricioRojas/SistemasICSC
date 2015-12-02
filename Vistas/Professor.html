@@ -60,7 +60,7 @@
                 </div>
                 <hr>
                 <button ng-disabled="limitePorcentaje" class="btn btn-success" data-toggle="modal" data-target="#ManteEvaluaciones" ng-click="agregarEvaluacion()">
-                  <span class="glyphicon glyphicon-plus"></span>  Nueva Evaluación
+                  <span class="glyphicon glyphicon-plus"></span>  Nueva evaluación
                 </button>
                 <br><br>
                 <div ng-show="limitePorcentaje" class="alert alert-danger" role="alert">
@@ -89,8 +89,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 ng-show="nueva">Crear Nueva Evaluación</h3>
-        <h3 ng-show="editar">Editar Evaluación {{nombreEvaluacion}}</h3>
+        <h3 ng-show="nueva">Nueva evaluación</h3>
+        <h3 ng-show="editar">Editar evaluación {{nombreEvaluacion}}</h3>
       </div>
       <div class="modal-body">
         <form role="form">
@@ -129,15 +129,15 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Historial de Evaluaciones - {{nombreEvaluacion}} - {{porcentajeEvaluacion}}%</h3>
+        <h3>Historial de evaluaciones - {{nombreEvaluacion}} - {{porcentajeEvaluacion}}%</h3>
       </div>
       <div class="modal-body">
-          <div style="overflow-y:auto; height:350px">
+          <div style="overflow-y:auto; height:250px">
             <table class="table table-striped">
                 <thead>
                   <tr>         
                     <th>Cedula</th>
-                    <th>Nombre Completo</th>
+                    <th>Nombre completo</th>
                     <th>Nota</th>
                   </tr>
                 </thead>
@@ -153,7 +153,9 @@
                     </tr>
                 </tbody>
               </table>
-          </div>          
+          </div>
+          <br>
+          <center><textarea ng-blur="cargarNotas()" class="txt-area" ng-model="notasCargadas"></textarea></center>
       </div>
       <div class="modal-footer">
         <span id="estado" class="text-danger">{{estado}}</span>
