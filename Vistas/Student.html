@@ -1,0 +1,232 @@
+<div style="background: white" class="panel-heading container">
+    <div class="col-md-12">
+        <div class="col-md-11 col-sm-10 col-xs-10"><h3>{{info.nombre}}</h3></div>
+        <div class="col-md-1 col-sm-2 col-xs-2">
+            <h2>
+                <button class="btn btn-success" ng-click="logout()">
+                    <span class="glyphicon glyphicon-log-out"></span> Salir
+                </button>
+            </h2>
+        </div>
+    </div>    
+</div>
+<br>
+<div style="background: white" class="container">    
+    <div class="panel-body">
+        <h3> <span class =" label label-success">Mis cursos</span></h3>
+        <div>
+        <uib-accordion close-others="true">          
+          
+            <uib-accordion-group is-open="isopen" ng-repeat="curso in MisCursos">
+                <uib-accordion-heading>                
+                    <span ng-click="verEvaluaciones(curso.idgrupo, curso.nombre)">{{ curso.codigo }}&nbsp;&nbsp;-&nbsp;&nbsp;GR{{curso.numgrupo}}&nbsp;&nbsp;-&nbsp;&nbsp;{{curso.nombre}}</span>
+                    <i ng-click="verEvaluaciones(curso.idgrupo, curso.nombre)" class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isopen, 'glyphicon-chevron-right': !isopen}"></i>
+                </uib-accordion-heading>
+                
+                <br>
+                <div class="btn-group">
+                    <button id="tabEstadisticas" type="button" ng-class="{'btn btn-primary': EstadisticasTab, 'btn btn-default': !EstadisticasTab}" ng-click="tabEstd()">Estadisticas</button>
+                    <button id="tabEvaluacion" type="button" ng-class="{'btn btn-primary': EvaluacionesTab, 'btn btn-default': !EvaluacionesTab}" ng-click="tabEval()">Evaluaciones</button>
+                </div>                
+                <hr>                
+                <div ng-show="EstadisticasTab">
+                    <table class="table table-striped" ng-show="estadisticas">
+                        <thead>
+                            <tr>
+                                <th colspan="2"><h4><b>Estadísticas del curso</b></h4></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Porcentaje total evaluado</strong>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{porcentaje}}%;">
+                                            {{porcentaje}}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nota</strong>
+                                    <div class="progress">
+                                      <div class="progress-bar" ng-class="{'progress-bar-success': nota >= 67.5, 'progress-bar-warning': nota >= 57.5 && nota <= 67.4, 'progress-bar-danger': nota <= 57.4}" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{nota}}%;">
+                                      {{nota}}%
+                                      </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Porcentaje proyectado de nota</strong>
+                                    <div class="progress">
+                                      <div class="progress-bar" ng-class="{'progress-bar-success': notaProyectada >= 67.5, 'progress-bar-warning': notaProyectada >= 57.5 && notaProyectada <= 67.4, 'progress-bar-danger': notaProyectada <= 57.4}" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{notaProyectada}}%;">
+                                      {{notaProyectada}}%
+                                      </div>
+                                        <!--<div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{notaProyectada}}%;">
+                                            {{notaProyectada}}%
+                                        </div>-->
+                                    </div>
+                                </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>      
+                
+                <div ng-show="EvaluacionesTab" style="overflow-y:auto; height:250px;">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>Nombre</th>
+                          <th>Porcentaje</th>
+                          <th>Nota</th>
+                          <th>&nbsp;</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ng-repeat="eval in evaluacionesCurso">
+                          <td>{{ eval.nombre }}</td>
+                          <td>{{ eval.porcentaje }}</td>
+                          <td>{{ eval.nota }}</td>
+                          <td><button class="btn" data-toggle="modal" data-target="#CitasEval" ng-click="citasRevision(eval.nombre,eval.idevaluacion)"><span class="glyphicon glyphicon-calendar"></span>  Citas de revision</button></td>
+                        </tr>
+                      </tbody>                      
+                    </table>
+                </div>
+            </uib-accordion-group>
+            
+        </uib-accordion>
+
+      </div>
+        
+        
+        
+        
+    </div>    
+</div>
+<br>
+<div style="background: white" class="container" ng-show="false">
+    <div class="panel-body">
+        <h3> <span class =" label label-success">Evaluaciones de {{cursoNombre}}</span></h3>
+        <div style="overflow-y:auto; height:250px;">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Porcentaje</th>
+                  <th>Nota</th>
+                  <th>Citas de revision</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="eval in evaluacionesCurso">
+                  <td>{{ eval.nombre }}</td>
+                  <td>{{ eval.porcentaje }}</td>
+                  <td>{{ eval.nota }}</td>
+                  <td><button class="btn" data-toggle="modal" data-target="#CitasEval" ng-click="citasRevision(eval.nombre,eval.idevaluacion)"><span class="glyphicon glyphicon-calendar"></span></button></td>
+                </tr>
+              </tbody>
+              <tfoot ng-show="estadisticas">
+                  <tr>
+                    <td colspan="4" class="text-center"><h5><b>Estadísticas del curso</b></h5></td>
+                  </tr>
+                  <tr>
+                    <td>Porcentaje total evaluado</td>
+                    <td colspan="3">
+                      <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{porcentaje}}%;">
+                          {{porcentaje}}%
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nota</td>
+                    <td colspan="3">
+                      <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{nota}}%;">
+                          {{nota}}%
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Porcentaje proyectado de nota</td>
+                    <td colspan="3">
+                      <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{notaProyectada}}%;">
+                          {{notaProyectada}}%
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+              </tfoot>
+            </table>
+        </div>
+    </div>    
+</div>
+
+<div class="modal fade" id="CitasEval" tabindex="-1" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
+  <div ng-show="sinCita">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Citas de revisión de {{nombreEvaluacion}}</h3>
+        </div>
+        <div class="modal-body">
+          <label>Seleccione una de las citas</label>
+          <div style="overflow-y:auto; height:250px;">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Fecha</th>
+                    <th>Hora de inicio</th>
+                    <th>Hora de fin</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="cita in citas">
+                    <td><input type="radio" name="checkCita" ng-click="selectCita(cita.idcita)"></td>
+                    <td>{{ cita.fecha }}</td>
+                    <td>{{ cita.hora_inicio }}</td>
+                    <td>{{ cita.hora_fin }}</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button ng-disabled="selectedCita" class="btn btn-success" data-dismiss="modal" ng-disabled="error" ng-click="agregarCitaRevision()">
+              <span class="glyphicon glyphicon-ok"></span> Listo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-show="conCita">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Cita de revisión de {{nombreEvaluacion}}</h3>
+        </div>
+        <div class="modal-body text-center">
+          <p>
+            <label>Su cita de revisión es el {{citaRevision[1]}}.</label>
+          </p>
+          <p>
+            <label>Inicia a las {{citaRevision[2]}} y finaliza a las {{citaRevision[3]}}.</label>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button ng-disabled="selectedCita" class="btn btn-success" data-dismiss="modal" ng-disabled="error" ng-click="agregarCitaRevision()">
+              <span class="glyphicon glyphicon-ok"></span> Listo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br>
